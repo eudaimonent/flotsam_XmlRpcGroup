@@ -31,9 +31,9 @@ else
     // Please set information of your mysql server, if you do not use CMS/LMS.
 	$dbPort 		= 3306;
 	$dbHost 		= "localhost";
-	$dbName 		= "";
-	$dbUser 		= "";
-	$dbPassword		= "";
+	$dbName 		= '';
+	$dbUser 		= '';
+	$dbPassword		= '';
 
 	$groupReadKey  	= "1234";
 	$groupWriteKey 	= "1234";
