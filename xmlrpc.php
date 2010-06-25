@@ -125,7 +125,7 @@
 	
     $uuidZero = "00000000-0000-0000-0000-000000000000";
     
-    $groupDBCon = mysql_connect($dbHost,$dbUser,$dbPassword);
+    $groupDBCon = mysql_connect($dbHost, $dbUser, $dbPassword);
     if (!$groupDBCon)
     {
         die('Could not connect: ' . mysql_error());
