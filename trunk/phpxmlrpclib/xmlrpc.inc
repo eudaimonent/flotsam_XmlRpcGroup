@@ -231,11 +231,13 @@
 
 	// by Fumi.Iseki for Japanese
 	//$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
-	if (defined('_CHARSET')) {
-		$GLOBALS['xmlrpc_internalencoding']=_CHARSET;
-	}
-	else {
-		$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
+	if ($GLOBALS['xmlrpc_internalencoding']=="") {
+		if (defined('_CHARSET')) {
+			$GLOBALS['xmlrpc_internalencoding']=_CHARSET;
+		}
+		else {
+			$GLOBALS['xmlrpc_internalencoding']='ISO-8859-1';
+		}
 	}
 
 	$GLOBALS['xmlrpcName']='XML-RPC for PHP';
