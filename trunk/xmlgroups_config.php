@@ -3,7 +3,7 @@
 // Group DB configration by Fumi.Iseki
 //
 
-require_once('../include/config.php');
+require_once('../include/cms_interface.php');
 
 
 if (defined('CMS_DB_HOST'))
