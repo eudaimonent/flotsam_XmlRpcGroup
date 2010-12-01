@@ -1638,7 +1638,8 @@
 		$f = fopen($debugXMLRPCFile,"a");
 		fwrite($f,"\n----- " . date("Y-m-d H:i:s") . " -----\n");
 		$debugInfo = $s->serializeDebug();
-		$debugInfo = split("\n",$debugInfo);
+		//$debugInfo = split("\n",$debugInfo);
+		$debugInfo = explode("\n",$debugInfo);
 		unset($debugInfo[0]);
 		unset($debugInfo[count($debugInfo) -1]);
 		$debugInfo = join("\n",$debugInfo);	
