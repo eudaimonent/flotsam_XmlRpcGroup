@@ -1587,45 +1587,42 @@
 	
     
     $s = new xmlrpc_server(array(
-                            "test"                               => array("function" => "test")
+                            "test"                              => array("function" => "test")
                           , "groups.createGroup"                => array("function" => "createGroup", "signature" => $common_sig)
                           , "groups.updateGroup"                => array("function" => "updateGroup", "signature" => $common_sig)
                           , "groups.getGroup"                   => array("function" => "getGroup", "signature" => $common_sig)
-                          , "groups.findGroups"                    => array("function" => "findGroups", "signature" => $common_sig)
+                          , "groups.findGroups"                 => array("function" => "findGroups", "signature" => $common_sig)
 
-                          , "groups.getGroupRoles"                => array("function" => "getGroupRoles", "signature" => $common_sig)
-                          , "groups.addRoleToGroup"                => array("function" => "addRoleToGroup", "signature" => $common_sig)
+                          , "groups.getGroupRoles"              => array("function" => "getGroupRoles", "signature" => $common_sig)
+                          , "groups.addRoleToGroup"             => array("function" => "addRoleToGroup", "signature" => $common_sig)
                           , "groups.removeRoleFromGroup"        => array("function" => "removeRoleFromGroup", "signature" => $common_sig)
                           , "groups.updateGroupRole"            => array("function" => "updateGroupRole", "signature" => $common_sig)
                           , "groups.getGroupRoleMembers"        => array("function" => "getGroupRoleMembers", "signature" => $common_sig)
                           
-                          , "groups.setAgentGroupSelectedRole"    => array("function" => "setAgentGroupSelectedRole", "signature" => $common_sig)
+                          , "groups.setAgentGroupSelectedRole"  => array("function" => "setAgentGroupSelectedRole", "signature" => $common_sig)
                           , "groups.addAgentToGroupRole"        => array("function" => "addAgentToGroupRole", "signature" => $common_sig)
                           , "groups.removeAgentFromGroupRole"   => array("function" => "removeAgentFromGroupRole", "signature" => $common_sig)
                           
                           , "groups.getGroupMembers"            => array("function" => "getGroupMembers", "signature" => $common_sig)
                           , "groups.addAgentToGroup"            => array("function" => "addAgentToGroup", "signature" => $common_sig)
-                          , "groups.removeAgentFromGroup"        => array("function" => "removeAgentFromGroup", "signature" => $common_sig)
-                          , "groups.setAgentGroupInfo"            => array("function" => "setAgentGroupInfo", "signature" => $common_sig)
+                          , "groups.removeAgentFromGroup"       => array("function" => "removeAgentFromGroup", "signature" => $common_sig)
+                          , "groups.setAgentGroupInfo"          => array("function" => "setAgentGroupInfo", "signature" => $common_sig)
 
-                          , "groups.addAgentToGroupInvite"        => array("function" => "addAgentToGroupInvite", "signature" => $common_sig)
-                          , "groups.getAgentToGroupInvite"        => array("function" => "getAgentToGroupInvite", "signature" => $common_sig)
-                          , "groups.removeAgentToGroupInvite"    => array("function" => "removeAgentToGroupInvite", "signature" => $common_sig)
+                          , "groups.addAgentToGroupInvite"      => array("function" => "addAgentToGroupInvite", "signature" => $common_sig)
+                          , "groups.getAgentToGroupInvite"      => array("function" => "getAgentToGroupInvite", "signature" => $common_sig)
+                          , "groups.removeAgentToGroupInvite"   => array("function" => "removeAgentToGroupInvite", "signature" => $common_sig)
                           
                           , "groups.setAgentActiveGroup"        => array("function" => "setAgentActiveGroup", "signature" => $common_sig)
                           , "groups.getAgentGroupMembership"    => array("function" => "getAgentGroupMembership", "signature" => $common_sig)
-                          , "groups.getAgentGroupMemberships"    => array("function" => "getAgentGroupMemberships", "signature" => $common_sig)
-                          , "groups.getAgentActiveMembership"    => array("function" => "getAgentActiveMembership", "signature" => $common_sig)
-                          , "groups.getAgentRoles"                => array("function" => "getAgentRoles", "signature" => $common_sig)
+                          , "groups.getAgentGroupMemberships"   => array("function" => "getAgentGroupMemberships", "signature" => $common_sig)
+                          , "groups.getAgentActiveMembership"   => array("function" => "getAgentActiveMembership", "signature" => $common_sig)
+                          , "groups.getAgentRoles"              => array("function" => "getAgentRoles", "signature" => $common_sig)
                           
                           , "groups.getGroupNotices"            => array("function" => "getGroupNotices", "signature" => $common_sig)
-                          , "groups.getGroupNotice"                => array("function" => "getGroupNotice", "signature" => $common_sig)
-                          , "groups.addGroupNotice"                => array("function" => "addGroupNotice", "signature" => $common_sig)
+                          , "groups.getGroupNotice"             => array("function" => "getGroupNotice", "signature" => $common_sig)
+                          , "groups.addGroupNotice"             => array("function" => "addGroupNotice", "signature" => $common_sig)
                           
-                          
-                          
-                          
-                            ), false);
+                       ), false);
 
     $s->functions_parameters_type = 'phpvals';
     if (isset($debugXMLRPC) && $debugXMLRPC > 0 && isset($debugXMLRPCFile) && $debugXMLRPCFile != "") 
