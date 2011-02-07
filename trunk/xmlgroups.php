@@ -1,6 +1,6 @@
 <?php
 //
-// by Fumi.Iseki for CMS/LMS '09 5/31
+// by Fumi.Iseki '09 5/31
 //
 
 require_once('./xmlgroups_config.php');
@@ -13,6 +13,6 @@ require_once('./xmlgroups_config.php');
 //error_log('xmlgroups.php: '.$request_xml);
 
 
-include(CMS_MODULE_PATH.'/helper/xmlrpc.php');
+include(ENV_HELPER_PATH.'/xmlrpc.php');
 
 ?>
