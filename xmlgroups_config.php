@@ -29,19 +29,12 @@ if (defined('CMS_DB_HOST'))
 else
 {
     // Please set information of your mysql server, if you do not use CMS/LMS.
-	/**/
-	$dbHost 		= "localhost";
-	$dbName 		= '';
-	$dbUser 		= '';
-	$dbPassword		= '';
-	/*/
+	$dbPort 		= 3306;
 	$dbHost 		= OPENSIM_DB_HOST;
 	$dbName 		= OPENSIM_DB_NAME;
 	$dbUser 		= OPENSIM_DB_USER;
 	$dbPassword		= OPENSIM_DB_PASS;
-	/**/
 
-	$dbPort 		= 3306;
 	$groupReadKey  	= "1234";
 	$groupWriteKey 	= "1234";
 
