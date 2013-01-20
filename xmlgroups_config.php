@@ -6,9 +6,6 @@
 require_once('../include/env_interface.php');
 
 
-//
-// Please set information of your environment, if you do not use CMS/LMS.
-//
 
 if (defined('CMS_DB_HOST'))
 {
