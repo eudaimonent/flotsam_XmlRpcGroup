@@ -56,7 +56,7 @@ CREATE TABLE `osgroupinvite` (
   `GroupID` varchar(128) NOT NULL default '',
   `RoleID` varchar(128) NOT NULL default '',
   `AgentID` varchar(128) NOT NULL default '',
-  `TMStamp` timestamp(14) NOT NULL,
+  `TMStamp` timestamp NOT NULL,
   PRIMARY KEY  (`InviteID`),
   UNIQUE KEY `GroupID` (`GroupID`,`RoleID`,`AgentID`)
 ) TYPE=MyISAM;
