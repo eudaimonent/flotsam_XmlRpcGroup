@@ -85,13 +85,13 @@
 		$outAr=array();
 		foreach($server->dmap as $key => $val)
 		{
-			$outAr[]=&new xmlrpcval($key, 'string');
+			$outAr[] = new xmlrpcval($key, 'string');
 		}
 		if($server->allow_system_funcs)
 		{
 			foreach($GLOBALS['_xmlrpcs_dmap'] as $key => $val)
 			{
-				$outAr[]=&new xmlrpcval($key, 'string');
+				$outAr[] = new xmlrpcval($key, 'string');
 			}
 		}
 		return new xmlrpcresp(new xmlrpcval($outAr, 'array'));
@@ -130,9 +130,9 @@
 					$cursig=array();
 					foreach($inSig as $sig)
 					{
-						$cursig[]=&new xmlrpcval($sig, 'string');
+						$cursig[] = new xmlrpcval($sig, 'string');
 					}
-					$sigs[]=&new xmlrpcval($cursig, 'array');
+					$sigs[] = new xmlrpcval($cursig, 'array');
 				}
 				$r = new xmlrpcresp(new xmlrpcval($sigs, 'array'));
 			}
@@ -985,7 +985,7 @@
 				else
 				{
 					// build an xmlrpcmsg object with data parsed from xml
-					$m=&new xmlrpcmsg($GLOBALS['_xh']['method']);
+					$m = new xmlrpcmsg($GLOBALS['_xh']['method']);
 					// now add parameters in
 					for($i=0; $i<count($GLOBALS['_xh']['params']); $i++)
 					{

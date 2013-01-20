@@ -1671,7 +1671,7 @@
 			if(!$result) /// @todo we should use a better check here - what if we get back '' or '0'?
 			{
 				$this->errstr='no response';
-				$resp=&new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['curl_fail'], $GLOBALS['xmlrpcstr']['curl_fail']. ': '. curl_error($curl));
+				$resp = new xmlrpcresp(0, $GLOBALS['xmlrpcerr']['curl_fail'], $GLOBALS['xmlrpcstr']['curl_fail']. ': '. curl_error($curl));
 				curl_close($curl);
 				if($keepalive)
 				{
@@ -2813,10 +2813,10 @@ xmlrpc_encode_entitites($this->errstr, $GLOBALS['xmlrpc_internalencoding'], $cha
 				case 2:
 					// we're adding a scalar value to an array here
 					//$ar=$this->me['array'];
-					//$ar[]=&new xmlrpcval($val, $type);
+					//$ar[] = new xmlrpcval($val, $type);
 					//$this->me['array']=$ar;
 					// Faster (?) avoid all the costly array-copy-by-val done here...
-					$this->me['array'][]=&new xmlrpcval($val, $type);
+					$this->me['array'][] = new xmlrpcval($val, $type);
 					return 1;
 				default:
 					// a scalar, so set the value and remember we're scalar
