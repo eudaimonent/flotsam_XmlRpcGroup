@@ -15,4 +15,3 @@ require_once('./xmlgroups_config.php');
 
 include(ENV_HELPER_PATH.'/xmlrpc.php');
 
-?>
