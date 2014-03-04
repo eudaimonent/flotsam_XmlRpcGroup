@@ -19,6 +19,7 @@
 
 
 	// Modified by Fumi.Iseki '09 5/31
+	// Modified by Fumi.Iseki '14 3/4
 
     include("phpxmlrpclib/xmlrpc.inc");
     include("phpxmlrpclib/xmlrpcs.inc");
