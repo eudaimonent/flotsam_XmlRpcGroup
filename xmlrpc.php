@@ -717,7 +717,7 @@
 
         $agentID = $params["AgentID"];
         $groupID = $params["GroupID"];
-        $roleID = $params["RoleID"];
+        $roleID  = $params["RoleID"];
     
         // Check if agent already a member
         $sql = " SELECT count(AgentID) as isMember FROM $osgrouprolemembership WHERE AgentID = '$agentID' AND RoleID = '$roleID' AND GroupID = '$groupID'";
@@ -753,7 +753,7 @@
 
         $agentID = $params["AgentID"];
         $groupID = $params["GroupID"];
-        $roleID = $params["RoleID"];
+        $roleID  = $params["RoleID"];
     
 		// Check if being assigned to Owners role, assignments to an owners role can only be requested by owners.
 		$sql = " SELECT OwnerRoleID, AgentID "
@@ -766,17 +766,15 @@
 			return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
 		}
 		
-        if( mysql_num_rows($result) == 0 )
+        if( mysql_num_rows($results) != 0 )
         {
-			return array('error' => "Group ($groupID) not found", 'params' => var_export($params, TRUE));
+			$ownerRoleInfo = mysql_fetch_assoc($results);
+			if( ($ownerRoleInfo['OwnerRoleID'] == $roleID) && ($ownerRoleInfo['AgentID'] != $requestingAgent) )
+			{
+				return array('error' => "Requesting agent $requestingAgent is not a member of the Owners Role and cannot add members to the owners role.", 
+							 'params' => var_export($params, TRUE));
+			}
 		}
-
-		$ownerRoleInfo = mysql_fetch_assoc($results);
-		if( ($ownerRoleInfo['OwnerRoleID'] == $roleID) && ($ownerRoleInfo['OwnerRoleID'] != $requestingAgent) )
-		{
-			return array('error' => "Requesting agent $requestingAgent is not a member of the Owners Role and cannot add members to the owners role.", 'params' => var_export($params, TRUE));
-		}
-	
 	
 		if( is_array($error = checkGroupPermission($groupID, $groupPowers['AssignMember'])) )
 		{
