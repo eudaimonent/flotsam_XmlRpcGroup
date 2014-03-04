@@ -348,7 +348,7 @@
             return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
         }
         
-        $sql = "UPDATE FROM $osgroupmembership SET SelectedRoleID = '$uuidZero' WHERE GroupID = '$groupID' AND SelectedRoleID = '$roleID'";
+        $sql = "UPDATE $osgroupmembership SET SelectedRoleID = '$uuidZero' WHERE GroupID = '$groupID' AND SelectedRoleID = '$roleID'";
         if (!mysql_query($sql, $groupDBCon))
         {
             return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
