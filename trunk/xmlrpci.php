@@ -17,6 +17,7 @@
 
 	// Modified by Fumi.Iseki '09 5/31
 	// Modified by Fumi.Iseki '14 3/4
+	// Modified by Fumi.Iseki '14 5/15 for MySQLi
 
 
     include("phpxmlrpclib/xmlrpc.inc");
@@ -124,12 +125,12 @@
 	
     $uuidZero = "00000000-0000-0000-0000-000000000000";
     
-    $groupDBCon = mysql_connect($dbHost, $dbUser, $dbPassword);
+    $groupDBCon = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbName);
     if (!$groupDBCon)
     {
-        die('Could not connect: ' . mysql_error());
+        die('Could not connect: ' . mysqli_connect_error());
     }
-    mysql_select_db($dbName, $groupDBCon);
+
 
 	// This is filled in by secure()
 	$requestingAgent = $uuidZero;
@@ -173,9 +174,9 @@
                 VALUES
                 ('$groupID', '$name', '$charter', '$insigniaID', '$founderID', $membershipFee, $openEnrollment, $showInList, $allowPublish, $maturePublish, '$ownerRoleID')";
         
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         // Create Everyone Role
@@ -237,9 +238,9 @@
         $sql = " INSERT INTO $osrole (GroupID, RoleID, Name, Description, Title, Powers) VALUES "
               ." ('$groupID', '$roleID', '$name', '$desc', '$title', $powers)";
 
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error()
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon)
                        , 'method' => 'addRoleToGroup'
                        , 'params' => var_export($params, TRUE));
         }
@@ -311,9 +312,9 @@
         
         $sql .= " WHERE GroupID = '$groupID' AND RoleID = '$roleID'";
 
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array("success" => "true");
@@ -342,21 +343,21 @@
         /// 3. Delete roll
         
         $sql = "DELETE FROM $osgrouprolemembership WHERE GroupID = '$groupID' AND RoleID = '$roleID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         $sql = "UPDATE $osgroupmembership SET SelectedRoleID = '$uuidZero' WHERE GroupID = '$groupID' AND SelectedRoleID = '$roleID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         $sql = "DELETE FROM $osrole WHERE GroupID = '$groupID' AND RoleID = '$roleID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array("success" => "true");
@@ -398,19 +399,19 @@
         
         $sql .= " GROUP BY $osgroup.GroupID, $osgroup.name, charter, insigniaID, founderID, membershipFee, openEnrollment, showInList, allowPublish, maturePublish, ownerRoleID";
         
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         
         if (!$result) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
-        if (mysql_num_rows($result) == 0) 
+        if (mysqli_num_rows($result) == 0) 
         {
             return array('succeed' => 'false', 'error' => 'Group Not Found', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
-        return mysql_fetch_assoc($result);
+        return mysqli_fetch_assoc($result);
         
     }        
     
@@ -451,9 +452,9 @@
                 WHERE
                     GroupID = '$groupID'";
         
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
         return array('success' => 'true');
@@ -481,21 +482,21 @@
 			  ." ) AND ShowInList = 1" 
               ." GROUP BY $osgroup.GroupID, $osgroup.Name";
         
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         
         if (!$result) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
-        if( mysql_num_rows($result) == 0 )
+        if( mysqli_num_rows($result) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'No groups found.', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
         $results = array();
 
-        while ($row = mysql_fetch_assoc($result)) 
+        while ($row = mysqli_fetch_assoc($result)) 
         {
             $groupID = $row['GroupID'];
             $results[$groupID] = $row;
@@ -517,19 +518,19 @@
               ." SET ActiveGroupID = '$groupID'"
               ." WHERE AgentID = '$agentID'";
     
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_affected_rows() == 0 )
+        if( mysqli_affected_rows($groupDBCon) == 0 )
         {
             $sql = " INSERT INTO $osagent (ActiveGroupID, AgentID) VALUES "
                   ." ('$groupID', '$agentID')";
         
-            if (!mysql_query($sql, $groupDBCon))
+            if (!mysqli_query($groupDBCon, $sql))
             {
-                return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+                return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
             }
         }
     
@@ -584,16 +585,16 @@
 		        $sql = " SELECT GroupID, RoleID, AgentID FROM $osgroupinvite"
 		              ." WHERE $osgroupinvite.AgentID = '$agentID' AND $osgroupinvite.GroupID = '$groupID'";
 		              
-		        $results = mysql_query($sql, $groupDBCon);
+		        $results = mysqli_query($groupDBCon, $sql);
 		        if (!$results) 
 		        {
-		            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+		            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
 		        }
 		        
-		        if( mysql_num_rows($results) == 1 )
+		        if( mysqli_num_rows($results) == 1 )
 		        {
 					// if there is an invite, make sure we're adding the user to the role specified in the invite
-		            $inviteInfo = mysql_fetch_assoc($results);
+		            $inviteInfo = mysqli_fetch_assoc($results);
 					$params['RoleID'] = $inviteInfo['RoleID'];
 		        } else {
 					// Not openenrollment, not invited, return permission denied error
@@ -623,22 +624,23 @@
     
         // Check if agent already a member
         $sql = " SELECT count(AgentID) as isMember FROM $osgroupmembership WHERE AgentID = '$agentID' AND GroupID = '$groupID'";
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         if (!$result)
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
         // If not a member, add membership, select role (defaults to uuidZero, or everyone role)
-        if( mysql_result($result, 0) == 0 )
+        //if( mysql_result($result, 0) == 0 )
+        if(!mysqli_fetch_row($result))
         {
             $sql = " INSERT INTO $osgroupmembership (GroupID, AgentID, Contribution, ListInProfile, AcceptNotices, SelectedRoleID) VALUES "
                   ."('$groupID','$agentID', 0, 1, 1,'$roleID')";
         
         
-            if (!mysql_query($sql, $groupDBCon))
+            if (!mysqli_query($groupDBCon, $sql))
             {
-                return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+                return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
             }
         }
         
@@ -687,23 +689,23 @@
         $sql = " UPDATE $osagent "
               ." SET ActiveGroupID = '$uuidZero'"
               ." WHERE AgentID = '$agentID' AND ActiveGroupID = '$groupID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         $sql = " DELETE FROM $osgroupmembership "
               ." WHERE AgentID = '$agentID' AND GroupID = '$groupID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         $sql = " DELETE FROM $osgrouprolemembership "
               ." WHERE AgentID = '$agentID' AND GroupID = '$groupID'";
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array("success" => "true");
@@ -720,20 +722,21 @@
     
         // Check if agent already a member
         $sql = " SELECT count(AgentID) as isMember FROM $osgrouprolemembership WHERE AgentID = '$agentID' AND RoleID = '$roleID' AND GroupID = '$groupID'";
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         if (!$result)
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
     
-        if( mysql_result($result, 0) == 0 )
+        //if( mysql_result($result, 0) == 0 )
+        if(!mysqli_fetch_row($result))
         {
             $sql = " INSERT INTO $osgrouprolemembership (GroupID, RoleID, AgentID) VALUES "
                   ."('$groupID', '$roleID', '$agentID')";
         
-            if (!mysql_query($sql, $groupDBCon))
+            if (!mysqli_query($groupDBCon, $sql))
             {
-                return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+                return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
             }
         }
     
@@ -759,15 +762,15 @@
 		      ." FROM $osgroup LEFT JOIN $osgrouprolemembership ON ($osgroup.GroupID = $osgrouprolemembership.GroupID AND $osgroup.OwnerRoleID = $osgrouprolemembership.RoleID) "
 			  ." WHERE $osgrouprolemembership.AgentID = '$agentID' AND $osgroup.GroupID = '$groupID'";
 			  
-		$results = mysql_query($sql, $groupDBCon);
+		$results = mysqli_query($groupDBCon, $sql);
 		if (!$results) 
 		{
-			return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+			return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
 		}
 		
-        if( mysql_num_rows($results) != 0 )
+        if( mysqli_num_rows($results) != 0 )
         {
-			$ownerRoleInfo = mysql_fetch_assoc($results);
+			$ownerRoleInfo = mysqli_fetch_assoc($results);
 			if( ($ownerRoleInfo['OwnerRoleID'] == $roleID) && ($ownerRoleInfo['AgentID'] != $requestingAgent) )
 			{
 				return array('error' => "Requesting agent $requestingAgent is not a member of the Owners Role and cannot add members to the owners role.", 
@@ -804,17 +807,17 @@
 		
         // If agent has this role selected, change their selection to everyone (uuidZero) role
         $sql = " UPDATE $osgroupmembership SET SelectedRoleID = '$uuidZero' WHERE AgentID = '$agentID' AND GroupID = '$groupID' AND SelectedRoleID = '$roleID'";
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         if (!$result)
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
         $sql = " DELETE FROM $osgrouprolemembership WHERE AgentID = '$agentID' AND GroupID = '$groupID' AND RoleID = '$roleID'";
     
-        if (!mysql_query($sql, $groupDBCon))
+        if (!mysqli_query($groupDBCon, $sql))
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array("success" => "true");
@@ -830,10 +833,10 @@
         $roleID = $params["RoleID"];
     
         $sql = " UPDATE $osgroupmembership SET SelectedRoleID = '$roleID' WHERE AgentID = '$agentID' AND GroupID = '$groupID'";
-        $result = mysql_query($sql, $groupDBCon);
+        $result = mysqli_query($groupDBCon, $sql);
         if (!$result)
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
     
         return array('success' => 'true');
@@ -882,28 +885,28 @@
               ."              JOIN $osagent ON ($osagent.AgentID = $osgroupmembership.AgentID)"
               ." WHERE $osgroup.GroupID = '$groupID' AND $osgroupmembership.AgentID = '$agentID'";
         
-        $groupmembershipResult = mysql_query($sql, $groupDBCon);
+        $groupmembershipResult = mysqli_query($groupDBCon, $sql);
         if (!$groupmembershipResult) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_num_rows($groupmembershipResult) == 0 )
+        if( mysqli_num_rows($groupmembershipResult) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'None Found', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
-        $groupMembershipInfo = mysql_fetch_assoc($groupmembershipResult);
+        $groupMembershipInfo = mysqli_fetch_assoc($groupmembershipResult);
         
         $sql = " SELECT BIT_OR($osrole.Powers) AS GroupPowers"
               ." FROM $osgrouprolemembership JOIN $osrole ON ($osgrouprolemembership.GroupID = $osrole.GroupID AND $osgrouprolemembership.RoleID = $osrole.RoleID)"
               ." WHERE $osgrouprolemembership.GroupID = '$groupID' AND $osgrouprolemembership.AgentID = '$agentID'";
-        $groupPowersResult = mysql_query($sql, $groupDBCon);
+        $groupPowersResult = mysqli_query($groupDBCon, $sql);
         if (!$groupPowersResult) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
-        $groupPowersInfo = mysql_fetch_assoc($groupPowersResult);
+        $groupPowersInfo = mysqli_fetch_assoc($groupPowersResult);
         
         return array_merge($groupMembershipInfo, $groupPowersInfo);
     }
@@ -928,31 +931,31 @@
               ."         LEFT JOIN $osagent ON ($osagent.AgentID = $osgroupmembership.AgentID)"
               ." WHERE $osgroupmembership.AgentID = '$agentID'";
         
-        $groupmembershipResults = mysql_query($sql, $groupDBCon);
+        $groupmembershipResults = mysqli_query($groupDBCon, $sql);
         if (!$groupmembershipResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
-        if( mysql_num_rows($groupmembershipResults) == 0 )
+        if( mysqli_num_rows($groupmembershipResults) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'No Memberships', 'params' => var_export($params, TRUE), 'sql' => $sql);
             
         }
         
         $groupResults = array();
-        while($groupMembershipInfo = mysql_fetch_assoc($groupmembershipResults))
+        while($groupMembershipInfo = mysqli_fetch_assoc($groupmembershipResults))
         {
             $groupID = $groupMembershipInfo['GroupID'];
             $sql = " SELECT BIT_OR($osrole.Powers) AS GroupPowers"
                   ." FROM $osgrouprolemembership JOIN $osrole ON ($osgrouprolemembership.GroupID = $osrole.GroupID AND $osgrouprolemembership.RoleID = $osrole.RoleID)"
                   ." WHERE $osgrouprolemembership.GroupID = '$groupID' AND $osgrouprolemembership.AgentID = '$agentID'";
-            $groupPowersResult = mysql_query($sql, $groupDBCon);
+            $groupPowersResult = mysqli_query($groupDBCon, $sql);
             if (!$groupPowersResult) 
             {
-                return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+                return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
             }
-            $groupPowersInfo = mysql_fetch_assoc($groupPowersResult);
+            $groupPowersInfo = mysqli_fetch_assoc($groupPowersResult);
             $groupResults[$groupID] = array_merge($groupMembershipInfo, $groupPowersInfo);
         }
         
@@ -983,35 +986,35 @@
                                                                                AND ($osgroupmembership.AgentID = OwnerRoleMembership.AgentID))"
               ." WHERE $osgroup.GroupID = '$groupID'";
         
-        $groupmemberResults = mysql_query($sql, $groupDBCon);
+        $groupmemberResults = mysqli_query($groupDBCon, $sql);
         if (!$groupmemberResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if (mysql_num_rows($groupmemberResults) == 0) 
+        if (mysqli_num_rows($groupmemberResults) == 0) 
         {
             return array('succeed' => 'false', 'error' => 'No Group Members found', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
         $memberResults = array();
-        while($memberInfo = mysql_fetch_assoc($groupmemberResults))
+        while($memberInfo = mysqli_fetch_assoc($groupmemberResults))
         {
             $agentID = $memberInfo['AgentID'];
             $sql = " SELECT BIT_OR($osrole.Powers) AS AgentPowers"
                   ." FROM $osgrouprolemembership JOIN $osrole ON ($osgrouprolemembership.GroupID = $osrole.GroupID AND $osgrouprolemembership.RoleID = $osrole.RoleID)"
                   ." WHERE $osgrouprolemembership.GroupID = '$groupID' AND $osgrouprolemembership.AgentID = '$agentID'";
-            $memberPowersResult = mysql_query($sql, $groupDBCon);
+            $memberPowersResult = mysqli_query($groupDBCon, $sql);
             if (!$memberPowersResult) 
             {
-                return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+                return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
             }
             
-            if (mysql_num_rows($groupmemberResults) == 0) 
+            if (mysqli_num_rows($groupmemberResults) == 0) 
             {
                 $memberResults[$agentID] = array_merge($memberInfo, array('AgentPowers' => 0));
             } else {
-                $memberPowersInfo = mysql_fetch_assoc($memberPowersResult);
+                $memberPowersInfo = mysqli_fetch_assoc($memberPowersResult);
                 $memberResults[$agentID] = array_merge($memberInfo, $memberPowersInfo);
             }
         }
@@ -1043,27 +1046,27 @@
               ."              JOIN $osrole ON ($osgroupmembership.SelectedRoleID = $osrole.RoleID AND $osgroupmembership.GroupID = $osrole.GroupID)"
               ." WHERE $osagent.AgentID = '$agentID'";
         
-        $groupmembershipResult = mysql_query($sql, $groupDBCon);
+        $groupmembershipResult = mysqli_query($groupDBCon, $sql);
         if (!$groupmembershipResult) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
-        if (mysql_num_rows($groupmembershipResult) == 0) 
+        if (mysqli_num_rows($groupmembershipResult) == 0) 
         {
             return array('succeed' => 'false', 'error' => 'No Active Group Specified', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
-        $groupMembershipInfo = mysql_fetch_assoc($groupmembershipResult);
+        $groupMembershipInfo = mysqli_fetch_assoc($groupmembershipResult);
         
         $groupID = $groupMembershipInfo['GroupID'];
         $sql = " SELECT BIT_OR($osrole.Powers) AS GroupPowers"
               ." FROM $osgrouprolemembership JOIN $osrole ON ($osgrouprolemembership.GroupID = $osrole.GroupID AND $osgrouprolemembership.RoleID = $osrole.RoleID)"
               ." WHERE $osgrouprolemembership.GroupID = '$groupID' AND $osgrouprolemembership.AgentID = '$agentID'";
-        $groupPowersResult = mysql_query($sql, $groupDBCon);
+        $groupPowersResult = mysqli_query($groupDBCon, $sql);
         if (!$groupPowersResult) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
-        $groupPowersInfo = mysql_fetch_assoc($groupPowersResult);
+        $groupPowersInfo = mysqli_fetch_assoc($groupPowersResult);
         
         return array_merge($groupMembershipInfo, $groupPowersInfo);
     }
@@ -1094,19 +1097,19 @@
             $sql .= " AND $osgroupmembership.GroupID = '$groupID'";
         }
 
-        $roleResults = mysql_query($sql, $groupDBCon);
+        $roleResults = mysqli_query($groupDBCon. $sql);
         if (!$roleResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
-        if( mysql_num_rows($roleResults) == 0 )
+        if( mysqli_num_rows($roleResults) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'None found', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
         $roles = array();
-        while($role = mysql_fetch_assoc($roleResults))
+        while($role = mysqli_fetch_assoc($roleResults))
         {
             $ID = $role['GroupID'].$role['RoleID'];
             $roles[$ID] = $role;
@@ -1134,19 +1137,19 @@
               ." WHERE $osrole.GroupID = '$groupID'"
               ." GROUP BY $osrole.RoleID, $osrole.Name, $osrole.Title, $osrole.Description, $osrole.Powers";
               
-        $roleResults = mysql_query($sql, $groupDBCon);
+        $roleResults = mysqli_query($groupDBCon, $sql);
         if (!$roleResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_num_rows($roleResults) == 0 )
+        if( mysqli_num_rows($roleResults) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'No roles found for group', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
         $roles = array();
-        while($role = mysql_fetch_assoc($roleResults))
+        while($role = mysqli_fetch_assoc($roleResults))
         {
             $RoleID = $role['RoleID'];
             $roles[$RoleID] = $role;
@@ -1174,14 +1177,14 @@
               ." WHERE $osrole.GroupID = '$groupID'";
 //              ." AND $osrole.RoleID = '$roleID'";
               
-        $memberResults = mysql_query($sql, $groupDBCon);
+        $memberResults = mysqli_query($groupDBCon, $sql);
         if (!$memberResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         $members = array();
-        while($member = mysql_fetch_assoc($memberResults))
+        while($member = mysqli_fetch_assoc($memberResults))
         {
             $Key = $member['AgentID'] . $member['RoleID'];
             $members[$Key ] = $member;
@@ -1252,10 +1255,10 @@
         
         $sql .=" WHERE $osgroupmembership.GroupID = '$groupID' AND $osgroupmembership.AgentID = '$agentID'";
               
-        $memberResults = mysql_query($sql, $groupDBCon);
+        $memberResults = mysqli_query($groupDBCon, $sql);
         if (!$memberResults) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
 
         
@@ -1280,19 +1283,19 @@
               ." FROM $osgroupnotice"
               ." WHERE $osgroupnotice.GroupID = '$groupID'";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_num_rows($results) == 0 )
+        if( mysqli_num_rows($results) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'No Notices', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
         $notices = array();
-        while($notice = mysql_fetch_assoc($results))
+        while($notice = mysqli_fetch_assoc($results))
         {
             $NoticeID = $notice['NoticeID'];
             $notices[$NoticeID] = $notice;
@@ -1319,18 +1322,18 @@
               ." FROM $osgroupnotice"
               ." WHERE $osgroupnotice.NoticeID = '$noticeID'";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_num_rows($results) == 0 )
+        if( mysqli_num_rows($results) == 0 )
         {
             return array('succeed' => 'false', 'error' => 'Group Notice Not Found', 'params' => var_export($params, TRUE), 'sql' => $sql);
         }
         
-        return mysql_fetch_assoc($results);
+        return mysqli_fetch_assoc($results);
     }
     
     function addGroupNotice($params)
@@ -1361,10 +1364,10 @@
               ." VALUES "
               ." ('$groupID', '$noticeID', $timeStamp, '$fromName', '$subject', '$message', '$binaryBucket')";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array('success' => 'true');
@@ -1395,20 +1398,20 @@
         $sql = " DELETE FROM $osgroupinvite"
               ." WHERE $osgroupinvite.AgentID = '$agentID' AND $osgroupinvite.GroupID = '$groupID'";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         // Add new invite for this agent to this group for the specifide role
         $sql = " INSERT INTO $osgroupinvite"
               ." (InviteID, GroupID, RoleID, AgentID) VALUES ('$inviteID', '$groupID', '$roleID', '$agentID')";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array('success' => 'true');
@@ -1430,15 +1433,15 @@
         $sql = " SELECT GroupID, RoleID, AgentID FROM $osgroupinvite"
               ." WHERE $osgroupinvite.InviteID = '$inviteID'";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
-        if( mysql_num_rows($results) == 1 )
+        if( mysqli_num_rows($results) == 1 )
         {
-            $inviteInfo = mysql_fetch_assoc($results);
+            $inviteInfo = mysqli_fetch_assoc($results);
             $groupID  = $inviteInfo['GroupID'];
             $roleID   = $inviteInfo['RoleID'];
             $agentID  = $inviteInfo['AgentID'];
@@ -1464,10 +1467,10 @@
         $sql = " DELETE FROM $osgroupinvite"
               ." WHERE $osgroupinvite.InviteID = '$inviteID'";
               
-        $results = mysql_query($sql, $groupDBCon);
+        $results = mysqli_query($groupDBCon, $sql);
         if (!$results) 
         {
-            return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+            return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
         }
         
         return array('success' => 'true');
@@ -1641,7 +1644,7 @@
 		fclose($f);
     }
     
-    mysql_close($groupDBCon);
+    mysqli_close($groupDBCon);
 
     
 ?>
