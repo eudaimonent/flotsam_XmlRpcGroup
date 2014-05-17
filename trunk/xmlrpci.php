@@ -3,7 +3,7 @@
     /*
       Actual failures that result in mysql or php errors should be returned as:
       
-      return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
+      return array('error' => "Could not successfully run query ($sql) from DB: " . mysqli_error($groupDBCon), 'params' => var_export($params, TRUE));
       
       Methods that run without errors, but do not have the intended result should return as:
       
