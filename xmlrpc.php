@@ -635,7 +635,6 @@
             $sql = " INSERT INTO $osgroupmembership (GroupID, AgentID, Contribution, ListInProfile, AcceptNotices, SelectedRoleID) VALUES "
                   ."('$groupID','$agentID', 0, 1, 1,'$roleID')";
         
-        
             if (!mysql_query($sql, $groupDBCon))
             {
                 return array('error' => "Could not successfully run query ($sql) from DB: " . mysql_error(), 'params' => var_export($params, TRUE));
@@ -1555,7 +1554,7 @@
 		
 		// If it isn't set to true, then always return true, otherwise verify they have perms
 		if( !isset($groupEnforceGroupPerms) || ($groupEnforceGroupPerms != TRUE) )
-		{
+		{ 
 			return true;
 		}
 		
