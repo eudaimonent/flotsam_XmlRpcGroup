@@ -150,7 +150,7 @@
 			return $error;
 		}
 	 
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params["GroupID"];
@@ -274,7 +274,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -326,7 +326,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -376,7 +376,7 @@
 		
     function _getGroup($params)
     {
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $sql = " SELECT $osgroup.GroupID, $osgroup.Name, Charter, InsigniaID, FounderID, MembershipFee, OpenEnrollment, ShowInList, AllowPublish, MaturePublish, OwnerRoleID"
@@ -421,7 +421,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params["GroupID"];
@@ -467,7 +467,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $search = addslashes( $params['Search'] );
@@ -507,7 +507,7 @@
     
     function _setAgentActiveGroup($params)
     {
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
 		$agentID = $params['AgentID'];
@@ -543,7 +543,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		$agentID = $params['AgentID'];
 		$groupID = $params['GroupID'];
 		
@@ -562,7 +562,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params["GroupID"];
@@ -609,7 +609,7 @@
 	// Private method, does not include security, to only be called from places that have already verified security
     function _addAgentToGroup($params)
     {
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -669,7 +669,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -711,7 +711,7 @@
     
     function _addAgentToGroupRole($params)
     {
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -747,7 +747,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -790,7 +790,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -822,7 +822,7 @@
     
     function _setAgentGroupSelectedRole($params)
     {
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params["AgentID"];
@@ -847,7 +847,7 @@
 		}
 		
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
         $agentID = $params["AgentID"];
         $groupID = $params["GroupID"];
         $roleID = $params["RoleID"];
@@ -867,7 +867,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -915,7 +915,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
         $agentID = $params['AgentID'];
         
@@ -966,7 +966,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -1029,7 +1029,7 @@
 		
 		secureRequest($params, FALSE);
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params['AgentID'];
@@ -1075,7 +1075,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $agentID = $params['AgentID'];
@@ -1123,7 +1123,7 @@
 		}
 		
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -1162,7 +1162,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -1197,7 +1197,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 		
         if (isset($params['AgentID'])) {
@@ -1269,7 +1269,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID = $params['GroupID'];
@@ -1308,7 +1308,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $noticeID = $params['NoticeID'];
@@ -1340,7 +1340,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $groupID  = $params['GroupID'];
@@ -1378,7 +1378,7 @@
 			return $error;
 		}
 		
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $inviteID = $params['InviteID'];
@@ -1421,7 +1421,7 @@
 			return $error;
 		}
 
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $inviteID = $params['InviteID'];
@@ -1456,7 +1456,7 @@
 			return $error;
 		}
 	
-        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon;
+        global $groupEnforceGroupPerms, $requestingAgent, $uuidZero, $groupDBCon, $groupPowers;
 		global $osagent, $osgroup, $osgroupinvite, $osgroupmembership, $osgroupnotice, $osgrouprolemembership, $osrole;
 
         $inviteID = $params['InviteID'];
@@ -1581,8 +1581,8 @@
                        , 'params' => var_export($params, TRUE));
 		}
 	}
-	
-    
+
+
     $s = new xmlrpc_server(array(
                             "test"                              => array("function" => "test")
                           , "groups.createGroup"                => array("function" => "createGroup", "signature" => $common_sig)
