@@ -473,11 +473,15 @@
 
         $search = addslashes( $params['Search'] );
         
+		// FULLTEXT indexes is not supported in InnoDB :(
         $sql = " SELECT $osgroup.GroupID, $osgroup.Name, count($osgroupmembership.AgentID) as Members "
               ." FROM $osgroup LEFT JOIN $osgroupmembership ON ($osgroup.GroupID = $osgroupmembership.GroupID) "
               ." WHERE "
-			  ." (    MATCH ($osgroup.name) AGAINST ('$search' IN BOOLEAN MODE)"
-              ."   OR $osgroup.name LIKE '%$search%'"
+	//		  ." ( MATCH ($osgroup.name) AGAINST ('$search' IN BOOLEAN MODE)"
+    //          ."   OR $osgroup.name LIKE '%$search%'"
+    //          ."   OR $osgroup.name REGEXP '$search'"
+	//		  ." ) AND ShowInList = 1" 
+              ." (    $osgroup.name LIKE '%$search%'"
               ."   OR $osgroup.name REGEXP '$search'"
 			  ." ) AND ShowInList = 1" 
               ." GROUP BY $osgroup.GroupID, $osgroup.Name";
@@ -503,7 +507,6 @@
         }
         
         return array('results' => $results, 'success' => TRUE);
-        
     }
     
     function _setAgentActiveGroup($params)
