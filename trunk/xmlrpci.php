@@ -636,7 +636,7 @@
         // If not a member, add membership, select role (defaults to uuidZero, or everyone role)
         //if( mysql_result($result, 0) == 0 )
         $row = mysqli_fetch_row($result);
-        if(is_array($row) and $raw[0]==0)
+        if(is_array($row) and $row[0]==0)
         {
             $sql = " INSERT INTO $osgroupmembership (GroupID, AgentID, Contribution, ListInProfile, AcceptNotices, SelectedRoleID) VALUES "
                   ."('$groupID','$agentID', 0, 1, 1,'$roleID')";
@@ -733,7 +733,7 @@
     
         //if( mysql_result($result, 0) == 0 )
         $row = mysqli_fetch_row($result);
-        if(is_array($row) and $raw[0]==0)
+        if(is_array($row) and $row[0]==0)
         {
             $sql = " INSERT INTO $osgrouprolemembership (GroupID, RoleID, AgentID) VALUES "
                   ."('$groupID', '$roleID', '$agentID')";
